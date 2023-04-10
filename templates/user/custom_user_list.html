@@ -1,0 +1,38 @@
+<!-- custom_user_list.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Custom Users List</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Group Admin</th>
+        <th>Machine Admin</th>
+        <th>Machine Service</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for custom_user in custom_users %}
+        <tr>
+          <td>{{ custom_user.username }}</td>
+          <td>{{ custom_user.group_admin }}</td>
+          <td>{{ custom_user.machine_admin }}</td>
+          <td>{{ custom_user.machine_service }}</td>
+          <td>
+            <a href="{% url 'custom_user_detail' custom_user.pk %}" class="btn btn-primary">Detail</a>
+            <a href="{% url 'custom_user_update' custom_user.pk %}" class="btn btn-warning">Update</a>
+            <a href="{% url 'custom_user_delete' custom_user.pk %}" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No custom users found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'custom_user_create' %}" class="btn btn-success">Create Custom User</a>
+{% endblock content %}

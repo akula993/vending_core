@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <link href="{% static 'sign-in.css' %}" rel="stylesheet">
+
+<div class="container mt-5">
+<main class="form-signin w-100 m-auto">
+    <form class="mt-4" method="post">
+
+    <h2 class="text-center">Вход</h2>
+
+        {% csrf_token %}
+        {{ form.as_p }}
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+
+  </form>
+</main>
+
+</div>
+{% endblock %}

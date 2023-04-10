@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-4">
+      <!-- Блок с информацией о пользователе -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ user.username }}</h5>
+          <p class="card-text">{{ user.email }}</p>
+          <!-- Дополнительные данные о пользователе -->
+          <p class="card-text">Имя: {{ user.first_name }}</p>
+          <p class="card-text">Фамилия: {{ user.last_name }}</p>
+          <!-- Кнопка редактирования профиля -->
+          <a href="{% url 'custom_user_update' custom_user.pk %}" class="btn btn-primary">Редактировать профиль</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <!-- Блок с дополнительным содержимым профиля -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Дополнительные данные</h5>
+          <p class="card-text">...</p>
+          <!-- Другая информация о профиле -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

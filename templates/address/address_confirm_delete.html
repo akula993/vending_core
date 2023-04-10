@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-4">Подтверждение удаления адреса</h1>
+    <hr>
+    <p>Вы действительно хотите удалить адрес "{{ address.city }}, {{ address.street }} {{ address.house_number }} {{ address.shop_name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-danger">Удалить</button>
+                <a href="{% url 'address_list' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

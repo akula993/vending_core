@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-4">{% if counter.pk %}Редактирование{% else %}Создание{% endif %} счетчика</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'counter_list' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

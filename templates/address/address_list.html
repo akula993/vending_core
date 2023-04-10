@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Список адресов</h1>
+    <a href="{% url 'address_create' %}" class="btn btn-primary mb-3">Создать адрес</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Город</th>
+                <th>Улица</th>
+                <th>Дом</th>
+                <th>Магазин</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for address in object_list %}
+            <tr>
+                <td>{{ address.city }}</td>
+                <td>{{ address.street }}</td>
+                <td>{{ address.house_number }}</td>
+                <td>{{ address.shop_name }}</td>
+                <td>
+
+                    <a href="{% url 'address_detail' address.pk %}" class="btn btn-sm btn-primary">Подробнее</a>
+                    <a href="{% url 'address_update' address.pk %}" class="btn btn-sm btn-primary">Изменить</a>
+                    <a href="{% url 'address_delete' address.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

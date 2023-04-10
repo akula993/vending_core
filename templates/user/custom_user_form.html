@@ -1,0 +1,14 @@
+<!-- custom_user_form.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">{% if user_form.instance.pk %}Edit User{% else %}Create User{% endif %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit" class="btn btn-primary">{% if user_form.instance.pk %}Update User{% else %}Create User{% endif %}</button>
+    <a href="{% url 'custom_user_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

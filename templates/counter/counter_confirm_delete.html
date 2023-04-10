@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mt-4">Подтверждение удаления счетчика</h1>
+    <hr>
+    <p>Вы действительно хотите удалить счетчик со значением "{{ counter.counter_value }}" для аппарата "{{ counter.machine.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-danger">Удалить</button>
+                <a href="{% url 'counter_list' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
