@@ -2,9 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
-from .forms import CounterForm, LoginForm
+from .forms import CounterForm, LoginForm, MachineForm
 from .models import Address, Machine, Counter, Profile
 
 
@@ -20,29 +20,43 @@ class AddressDetailView(LoginRequiredMixin, DetailView):
     template_name = 'address/address_detail.html'
     context_object_name = 'address'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        address = self.get_object()
+        context['machine_form'] = MachineForm(initial={'address': address})
+        return context
 
+
+    def post(self, request, *args, **kwargs):
+        address = self.get_object()
+        machine_form = MachineForm(request.POST)
+        if machine_form.is_valid():
+            machine = machine_form.save(commit=False)
+            machine.address = address
+            machine.save()
+            return redirect('address_detail', pk=address.pk)
+        else:
+            # Если форма не валидна, обновляем контекст и рендерим снова
+            context = self.get_context_data(**kwargs)
+            context['machine_form'] = machine_form
+            return self.render_to_response(context)
 # Представление создания нового адреса
 class AddressCreateView(LoginRequiredMixin, CreateView):
     model = Address
     template_name = 'address/address_form.html'  # Замените на имя вашего шаблона
     fields = ['city', 'street', 'house_number', 'shop_name']  # Поля модели, отображаемые в форме создания адреса
     success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного создания адреса
-
-
 # Представление обновления адреса
 class AddressUpdateView(LoginRequiredMixin, UpdateView):
     model = Address
     template_name = 'address/address_form.html'  # Замените на имя вашего шаблона
     fields = ['city', 'street', 'house_number', 'shop_name']  # Поля модели, отображаемые в форме обновления адреса
     success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного обновления адреса
-
-
 # Представление удаления адреса
 class AddressDeleteView(LoginRequiredMixin, DeleteView):
     model = Address
     template_name = 'address/address_confirm_delete.html'  # Замените на имя вашего шаблона
     success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного удаления адреса
-
 
 # Аналогично можно создать представления для моделей Machine и Counter, используя ListView, CreateView, UpdateView и DeleteView,
 # и указав соответствующие модели, шаблоны, поля и URL-адреса.
@@ -53,8 +67,6 @@ class MachineListView(LoginRequiredMixin, ListView):
     model = Machine
     template_name = 'machine/machine_list.html'  # Замените на имя вашего шаблона
     context_object_name = 'machines'  # Имя переменной контекста, содержащей список адресов
-
-
 class MachineDetailView(LoginRequiredMixin, DetailView):
     model = Machine
     template_name = 'machine/machine_detail.html'
@@ -101,8 +113,11 @@ class MachineUpdateView(LoginRequiredMixin, UpdateView):
 class MachineDeleteView(LoginRequiredMixin, DeleteView):
     model = Machine
     template_name = 'machine/machine_confirm_delete.html'  # Замените на имя вашего шаблона
-    success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного удаления адреса
+    # success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного удаления адреса
 
+    def get_success_url(self):
+        machine = self.get_object()
+        return reverse('address_detail', args=[str(machine.address.pk)])
 
 # Представление списка аппаратов
 class CounterListView(LoginRequiredMixin, ListView):
@@ -133,12 +148,18 @@ class CounterUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного обновления адреса
 
 
+    def get_success_url(self):
+        counter = self.get_object()
+        return reverse('machine_detail', args=[str(counter.machine.pk)])
 # Представление удаления аппаратов
 class CounterDeleteView(LoginRequiredMixin, DeleteView):
     model = Counter
     template_name = 'counter/counter_confirm_delete.html'  # Замените на имя вашего шаблона
     success_url = reverse_lazy('address_list')  # URL-адрес для перенаправления после успешного удаления адреса
 
+    def get_success_url(self):
+        counter = self.get_object()
+        return reverse('machine_detail', args=[str(counter.machine.pk)])
 
 class CreationLoginView(LoginView):
     template_name = 'accounts/login.html'  # имя шаблона страницы входа

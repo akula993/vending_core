@@ -39,7 +39,7 @@ class Address(models.Model):
 
 
     def geo(self):
-        geolocator = Nominatim(user_agent="myGeocoder")  # Измените user_agent на свое значение
+        geolocator = Nominatim(user_agent="myGeocoder1")  # Измените user_agent на свое значение
         # Адрес, который нужно геокодировать
         address = f'{self.city}, {self.street}, {self.house_number}'
 
@@ -59,7 +59,7 @@ class Address(models.Model):
             return f'{latitude}, {longitude}'
         else:
             print(f"Ошибка геокодирования для адреса: {address}")
-            return None, None
+            return None
 
 class Machine(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название аппарата')
@@ -93,7 +93,7 @@ class Counter(models.Model):
     month = models.DateTimeField('Дата снятия счетчика', auto_now_add=True, blank=True, null=True)
 
     class Meta:
-        ordering = ['-month', ]
+        # ordering = ['-month', ]
         verbose_name_plural = 'Счетчики'
 
     def __str__(self):
