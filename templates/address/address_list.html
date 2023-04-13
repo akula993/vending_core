@@ -24,19 +24,19 @@
                     <td>{{ address.shop_name }}</td>
                     <td>
 
-                        {% cache 5000 address_list %}
                             {% if address.geo == None %}
 
                             {% elif address.geo %}
+                        {% cache 5000 address_list %}
                                 <a href="yandexnavi://map_search?text={{ address.geo }}" class="btn btn-sm btn-warning ">Построить
                                     маршрут?</a>
                                 <a href="yandexnavi://map_search?text={{ address.geo }} {{ address.shop_name }}"
                                    class="btn btn-sm btn-warning ">Построить
                                     маршрут?</a>
 
+                        {% endcache %}
                             {% endif %}
 
-                        {% endcache %}
                         <a href="{% url 'address_detail' address.pk %}" class="btn btn-sm btn-primary">Подробнее</a>
                         <a href="{% url 'address_update' address.pk %}" class="btn btn-sm btn-primary">Изменить</a>
                         <a href="{% url 'address_delete' address.pk %}" class="btn btn-sm btn-danger">Удалить</a>

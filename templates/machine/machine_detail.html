@@ -93,7 +93,6 @@
     var data = valuesArray.map(function(value) {
         return parseInt(value); // Парсим значения в числа, если они являются числами
     });
-
 var reversedData = data.slice().reverse();
 var result = data.map(function(curr, index) {
   if (index === 0) {
@@ -104,13 +103,19 @@ var result = data.map(function(curr, index) {
 });
 
 
-console.log(result); // Выведет -129
-console.log(reversedData); // Выведет -129
-    var counterData = {
+data = result.map(s => Math.abs(s));
+
+data = data.map(
+  function(n){
+    return (n* 10);
+  }
+);
+console.log(data);
+var counterData = {
         labels: labels,
         datasets: [{
             label: 'Значение счетчика',
-            data: result,
+            data: data,
             fill: false,
             borderColor: 'rgba(75, 192, 192, 1)',
             tension: 0.1
