@@ -1,171 +1,127 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-    <div class="container mt-4">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
         <div class="row">
-            <div class="col-6">
-                <h1>{{ machine.name }}</h1>
-                <p>Тип: {{ machine.type }}</p>
-                <p>Серийный номер: {{ machine.serial_number }}</p>
-                <p>Год выпуска: {{ machine.year }}</p>
-                <p>Описание: {{ machine.description }}</p>
-                <p>Сумма: {{ machine.get_sum }}р.</p>
-            </div>
-            <div class="col-6">
-                <h2>Добавить счетчик</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ counter_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Добавить счетчик</button>
-                </form>
-            </div>
+            <h1 class="text-center">{{ machine.name }}</h1>
+            <p>Тип: {{ machine.type }}</p>
+            <p>Серийный номер: {{ machine.serial_number }}</p>
+            <p>Год выпуска: {{ machine.year }}</p>
+            <p>Описание: {{ machine.description }}</p>
+            <p>Сумма: {{ machine.get_sum }}р.</p>
         </div>
-        <div class="row mt-4">
-            <div class="col">
-                {#        <a href="{% url 'machine_update' machine.pk %}" class="btn btn-secondary">Редактировать</a>#}
-                {#        <a href="{% url 'machine_delete' machine.pk %}" class="btn btn-danger">Удалить</a>#}
-            </div>
+        <div class="row">
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <a href="{% url 'machine_update' machine.pk %}" class="btn btn-secondary">Редактировать</a>
+            <a href="{% url 'machine_delete' machine.pk %}" class="btn btn-danger">Удалить</a>
+        </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col">
-            <h2>График счетчиков</h2><!-- Элемент canvas для отображения графика -->
-            <canvas id="counterChart"></canvas>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-4">
+            <h2 class="text-center">Добавить счетчик</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ counter_form.as_p }}
+                <button type="submit" class="btn btn-primary">Добавить счетчик</button>
+            </form>
+    </div>
 
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+        <div class="row">
+            <div class="col-md">
+                <h2>График счетчиков</h2>
+                <!-- Элемент canvas для отображения графика -->
+                <canvas id="counterChart"></canvas>
+            </div>
         </div>
     </div>
     <!-- Подключение библиотеки Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div id="results" data-values="{% for counter in machine.counter.all %}{{ counter.counter_value }},{% endfor %}"></div>
-
+    <div id="results"
+         data-values="{% for counter in machine.counter.all %}{{ counter.counter_value }},{% endfor %}"></div>
     <!-- JavaScript код для создания графика счетчиков -->
-{#    <script>#}
-{#    var resultsElement = document.getElementById('results');#}
-{#    var valuesString = resultsElement.dataset.values; // Получение значения атрибута data-values#}
-{#    var valuesArray = valuesString.split(','); // Разбивка строки на массив значений#}
-{#    console.log(valuesArray); // Вывод массива значений в консоль#}
-{#        var counterData = {#}
-{#            labels: [{% for counter in machine.counter.all %}'{{ counter.created_at }}',{% endfor %}],#}
-{#            datasets: [{#}
-{#                label: 'Значение счетчика',#}
-{#                data: [{% for counter in machine.counter.all %}{{ counter.counter_value }}, {% endfor %}],#}
-{#                fill: false,#}
-{#                borderColor: 'rgba(75, 192, 192, 1)',#}
-{#                tension: 0.1#}
-{#            }]#}
-{#        };#}
-{#        var counterConfig = {#}
-{#            type: 'line',#}
-{#            data: counterData,#}
-{#            options: {#}
-{#                responsive: true,#}
-{#                scales: {#}
-{#                    x: {#}
-{#                        display: true,#}
-{#                        title: {#}
-{#                            display: true,#}
-{#                            text: 'Дата и время'#}
-{#                        }#}
-{#                    },#}
-{#                    y: {#}
-{#                        display: true,#}
-{#                        title: {#}
-{#                            display: true,#}
-{#                            text: 'Значение счетчика'#}
-{#                        }#}
-{#                    }#}
-{#                }#}
-{#            }#}
-{#        };#}
-{#        var counterChart = new Chart(document.getElementById('counterChart'), counterConfig);#}
-{#    </script>#}
-<!-- JavaScript -->
-<script>
-    var resultsElement = document.getElementById('results');
-    var valuesString = resultsElement.dataset.values; // Получение значения атрибута data-values
-    var valuesArray = valuesString.split(','); // Разбивка строки на массив значений
+    <script>
 
-    // Удаляем последний элемент массива, так как он будет содержать пустую строку
-    valuesArray.pop();
+        var resultsElement = document.getElementById('results');
+        var valuesString = resultsElement.dataset.values; // Получение значения атрибута data-values
+        var valuesArray = valuesString.split(','); // Разбивка строки на массив значений
 
-    // Получение данных для меток (labels) и значений (data) из массива значений
-    var labels = [{% for counter in machine.counter.all %}'{{ counter.created_at }}',{% endfor %}];
-    var data = valuesArray.map(function(value) {
-        return parseInt(value); // Парсим значения в числа, если они являются числами
-    });
-var reversedData = data.slice().reverse();
-var result = data.map(function(curr, index) {
-  if (index === 0) {
-    return curr;
-  } else {
-    return data[index - 1] - curr;
-  }
-});
+        // Удаляем последний элемент массива, так как он будет содержать пустую строку
+        valuesArray.pop();
+
+        // Получение данных для меток (labels) и значений (data) из массива значений
+        var labels = [{% for counter in machine.counter.all %}'{{ counter.month|date:"d-m-yг" }}',{% endfor %}];
+        var data = valuesArray.map(function (value) {
+            return parseInt(value); // Парсим значения в числа, если они являются числами
+        });
+        var reversedData = data.slice().reverse();
+        var result = data.map(function (curr, index) {
+            if (index === 0) {
+                return curr;
+            } else {
+                return data[index - 1] - curr;
+            }
+        });
 
 
-data = result.map(s => Math.abs(s));
+        data = result.map(s => Math.abs(s));
 
-data = data.map(
-  function(n){
-    return (n* 10);
-  }
-);
-console.log(data.shift());
-var counterData = {
-        labels: labels,
-        datasets: [{
-            label: 'Значение счетчика',
-            data: data,
-            fill: false,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            tension: 0.1
-        }]
-    };
-    var counterConfig = {
-        type: 'line',
-        data: counterData,
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    display: true,
-                    title: {
+        data = data.map(
+            function (n) {
+                return (n * 10);
+            }
+        );
+        console.log(data.shift());
+        var counterData = {
+            labels: labels,
+            datasets: [{
+                label: 'Значение счетчика',
+                data: data,
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        };
+        var counterConfig = {
+            type: 'line',
+            data: counterData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
                         display: true,
-                        text: 'Дата и время'
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
+                        title: {
+                            display: true,
+                            text: 'Дата и время'
+                        }
+                    },
+                    y: {
                         display: true,
-                        text: 'Значение счетчика'
+                        title: {
+                            display: true,
+                            text: 'Значение счетчика'
+                        }
                     }
                 }
             }
-        }
-    };
-    var counterChart = new Chart(document.getElementById('counterChart'), counterConfig);
-</script>
-    <div class="row mt-4">
-        <div class="col">
-            <h2>Список счетчиков</h2>
-            <ul class="list-group">
-                {% for counter in machine.counter.all|slice:"::-1" %}
-                    <li class="list-group-item">
-                        {{ counter.counter_value }}
-                        <a href="{% url 'counter_update' counter.pk %}" class="btn btn-secondary btn-sm float-end">Редактировать</a>
-                        <a href="{% url 'counter_delete' counter.pk %}" class="btn btn-danger btn-sm float-end me-2">Удалить</a>
-                    </li>
-                    {% empty %}
-                    <li class="list-group-item">Нет аппаратов</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col">
-            <a href="{% url 'counter_create' %}" class="btn btn-primary">Добавить</a>
-
-        </div>
+        };
+        var counterChart = new Chart(document.getElementById('counterChart'), counterConfig);
+    </script>
+    <div class="row">
+    <div class="col-md">
+        <h2>Список счетчиков</h2>
+        <ul class="list-group">
+            {% for counter in machine.counter.all|slice:"::-1" %}
+                <li class="list-group-item">
+                    {{ counter.counter_value }}
+                    <a href="{% url 'counter_update' counter.pk %}" class="btn btn-secondary btn-sm float-end">Редактировать</a>
+                    <a href="{% url 'counter_delete' counter.pk %}"
+                       class="btn btn-danger btn-sm float-end me-2">Удалить</a>
+                </li>
+                {% empty %}
+                <li class="list-group-item">Нет аппаратов</li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

@@ -10,63 +10,90 @@
     <link href="{% static 'sign-in.css' %}" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">My Project</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="nav navbar-nav pull-sm-left">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'address_list' %}">Адреса</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'machine_list' %}">Аппараты</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'counter_list' %}">Счетчики</a>
-                    </li>
 
-                    </ul>
-                    <ul class="mx-auto">
-                    </ul>
-                    <ul class="nav navbar-nav pull-sm-right">
+<!-- Пример использования ключа notification_message -->
+{% if notification_message %}
+<div class="notification">
+    <p>{{ notification_message }}</p>
+</div>
+{% endif %}
 
-                        <!-- Проверяем, есть ли у пользователя профиль, перед созданием ссылки на профиль -->
-                        {#                {{ user.username }}#}
-
-                        {% if user.is_superuser %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
-                            </li>
-                        {% endif %}
-
-                        {% if user.profile %}
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="{% url 'profile-detail' pk=request.user.profile.pk %}">Профиль</a>
-                            </li>
-                        {% endif %}
-
+<!-- Пример использования ключа message -->
+{% if messages %}
+<div class="notification">
+    <p>{{ messages }}</p>
+</div>
+{% endif %}
+<!-- HEADER -->
+<header>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">My Project</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav navbar-nav pull-sm-left">
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+                            <a class="nav-link" href="{% url 'address_list' %}">Адреса</a>
                         </li>
-                        {% else %}
-
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Вход</a>
+                            <a class="nav-link" href="{% url 'machine_list' %}">Аппараты</a>
                         </li>
-                    </ul>
-                {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'counter_list' %}">Счетчики</a>
+                        </li>
+
+                        </ul>
+                        <ul class="mx-auto">
+                        </ul>
+                        <ul class="nav navbar-nav pull-sm-right">
+                            {% if user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
+                                </li>
+                            {% endif %}
+
+                            {% if user.profile %}
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       href="{% url 'profile-detail' pk=request.user.profile.pk %}">Профиль</a>
+                                </li>
+                            {% endif %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+                            </li>
+                            {% else %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Вход</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- ОСНОВНОЕ СОДЕРЖИМОЕ -->
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            {% block content %}
+            {% endblock %}
         </div>
-    </nav>
-</div>
-<div class="container mt-4">
-    {% block content %}
-    {% endblock %}
-</div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>#}
@@ -76,8 +103,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-            crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
 </body>
 </html>

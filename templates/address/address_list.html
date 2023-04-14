@@ -31,7 +31,7 @@
                             {% if address.geo == None %}
 
                             {% elif address.geo %}
-                                {% cache 5000 address_list %}
+                                {% cache 50000 address_list %}
                                     <a href="yandexnavi://map_search?text={{ address.geo }}"
                                        class="btn btn-sm btn-warning ">Построить
                                         маршрут?</a>
@@ -40,10 +40,14 @@
 
                             <a href="{% url 'address_detail' address.pk %}"
                                class="btn btn-sm btn-primary">Подробнее</a>
+                        {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+    <!-- Показать контент только для авторизованных пользователей с правами администратора -->
                             <a href="{% url 'address_update' address.pk %}"
                                class="btn btn-sm btn-primary">Изменить</a>
                             <a href="{% url 'address_delete' address.pk %}"
                                class="btn btn-sm btn-danger">Удалить</a>
+
+{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

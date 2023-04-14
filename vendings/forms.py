@@ -16,12 +16,23 @@ class MachineForm(forms.ModelForm):
 
 
 class CounterForm(forms.ModelForm):
+    month = forms.DateTimeField(label='Дата снятия счетчика', widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'datetime-local'}))
+
     class Meta:
         model = Counter
-        fields = ['counter_value']
+        fields = ['counter_value', 'machine']
         widgets = {
             'counter_value': forms.TextInput(attrs={'class': 'form-control'}),
+            'machine': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    def save(self, commit=True):
+        counter = super().save(commit=False)
+        counter.month = self.cleaned_data['month']
+        if commit:
+            counter.save()
+        return counter
+
 
 
 class LoginForm(AuthenticationForm):

@@ -11,26 +11,26 @@
             </div>
         </div>
 
-            {% if address.geo == None %}
-                <p>Адрес на карте не найден!</p>
-                <div id="map" style="width: 100%; height: 400px;"></div>
+        {% if address.geo == None %}
+            <p>Адрес на карте не найден!</p>
+            <div id="map" style="width: 100%; height: 400px;"></div>
 
-                <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-                <script type="text/javascript">
-                    ymaps.ready(init);
+            <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+            <script type="text/javascript">
+                ymaps.ready(init);
 
-                    function init() {
-                        var myMap = new ymaps.Map("map", {
-                            center: [55.755820, 37.617633],
-                            zoom: 10
-                        }, {
-                            searchControlProvider: 'yandex#search'
-                        });
-                    }
-                </script>
-            {% elif address.geo %}
+                function init() {
+                    var myMap = new ymaps.Map("map", {
+                        center: [55.755820, 37.617633],
+                        zoom: 10
+                    }, {
+                        searchControlProvider: 'yandex#search'
+                    });
+                }
+            </script>
+        {% elif address.geo %}
 
-        {% cache 5000 address_detail %}
+            {% cache 50000 address_detail %}
                 <div id="map" style="width: 100%; height: 400px;"></div>
                 {{ address.geo }}
                 <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
@@ -53,8 +53,8 @@
                         myMap.geoObjects.add(myPlacemark);
                     }
                 </script>
-        {% endcache %}
-            {% endif %}
+            {% endcache %}
+        {% endif %}
 
         <div class="row mt-4">
             <div class="col-6">
@@ -65,15 +65,18 @@
                             <div class="container">
                                 <div class="row align-items-start">
                                     <div class="col-4">
-                            <a href="{% url 'machine_detail' machine.pk %}"
-                               class="float-start text-decoration-none text-reset">{{ machine.name }}</a>
+                                        <a href="{% url 'machine_detail' machine.pk %}"
+                                           class="float-start text-decoration-none text-reset">{{ machine.name }}</a>
                                     </div>
 
                                     <div class="col-8 d-flex justify-content-end justify-content-end">
-                            <a href="{% url 'machine_detail' machine.pk %}" class="btn btn-info btn-sm m-1">Подробнее</a>
-                            <a href="{% url 'machine_update' machine.pk %}" class="btn btn-secondary btn-sm m-1">Редактировать</a>
-                            <a href="{% url 'machine_delete' machine.pk %}"
-                               class="btn btn-danger btn-sm m-1">Удалить</a>
+                                        <a href="{% url 'machine_detail' machine.pk %}" class="btn btn-info btn-sm m-1">Подробнее</a>
+                                        {% if user.is_authenticated and user.is_staff and user.profile.edit_address and user.profile.edit_address and user.profile.edit_machine %}
+                                            <a href="{% url 'machine_update' machine.pk %}"
+                                               class="btn btn-secondary btn-sm m-1">Редактировать</a>
+                                            <a href="{% url 'machine_delete' machine.pk %}"
+                                               class="btn btn-danger btn-sm m-1">Удалить</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -83,31 +86,34 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-6">
+            {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+                <!-- Показать контент только для авторизованных пользователей с правами администратора -->
                 <div class="col-6">
-                    <h2>Добавить кран</h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ machine_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Добавить кран</button>
-                    </form>
+                    <div class="col-6">
+                        <h2>Добавить кран</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ machine_form.as_p }}
+                            <button type="submit" class="btn btn-primary">Добавить кран</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div class="row mt-4">
             <div class="col">
-
-
-                    {% if address.geo == None %}
-                    {% elif address.geo %}
-                {% cache 5000 address_list %}
-                        <a href="yandexnavi://map_search?text={{ address.geo }}" class="btn btn-warning ">Построить
+                {% if address.geo == None %}
+                {% elif address.geo %}
+                    {% cache 50000 address_list %}
+                        <a href="yandexnavi://map_search?text={{ address.geo }}" class="btn btn-warning">Построить
                             маршрут?</a>
-                {% endcache %}
-                    {% endif %}
-                <a href="{% url 'machine_create' %}" class="btn btn-primary">Добавить</a>
-                <a href="{% url 'address_update' address.pk %}" class="btn btn-secondary">Редактировать</a>
-                <a href="{% url 'address_delete' address.pk %}" class="btn btn-danger">Удалить</a>
+                    {% endcache %}
+                {% endif %}
+                {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+{#                    <a href="{% url 'machine_create' %}" class="btn btn-primary">Добавить</a>#}
+                    <a href="{% url 'address_update' address.pk %}" class="btn btn-secondary">Редактировать</a>
+                    <a href="{% url 'address_delete' address.pk %}" class="btn btn-danger">Удалить</a>
+                {% endif %}
             </div>
         </div>
     </div>

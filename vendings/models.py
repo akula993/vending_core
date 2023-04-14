@@ -6,7 +6,10 @@ from geopy import Nominatim
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_image = models.ImageField(upload_to='profile_images/')
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    edit_address = models.BooleanField(default=False)
+    edit_machine = models.BooleanField(default=False)
+    edit_counter = models.BooleanField(default=False)
     # Дополнительные поля профиля пользователя
     def get_full_name(self):
         """Возвращает полное имя пользователя"""
@@ -24,6 +27,8 @@ class Profile(models.Model):
         """Возвращает описание профиля пользователя"""
         return self.description
 
+    def __str__(self):
+        return self.user.username
 
 class Address(models.Model):
     """Адресса в которых стоят аппараты"""
