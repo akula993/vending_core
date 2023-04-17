@@ -76,18 +76,18 @@ class MachineDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         machine = self.get_object()
-        context['counter_form'] = CounterForm(initial={'machine': machine})
+        context['counter_form'] = CounterForm(initial={'machine': machine, 'user': self.request.user})
         return context
 
     def post(self, request, *args, **kwargs):
         machine = self.get_object()
-        counter_form = CounterForm(request.POST)
+        counter_form = CounterForm(request.POST, initial={'user': request.user})
         if counter_form.is_valid():
             counter = counter_form.save(commit=False)
             counter.machine = machine
             counter.save()
             # Добавляем сообщение о действии пользователя
-            messages.success(request, f'Пользователь {Profile.user} сделал: добавил счетчик')
+            messages.success(request, f'Пользователь {request.user} сделал: добавил счетчик')  # Используем request.user
             return redirect('machine_detail', pk=machine.pk)
         else:
             # Если форма не валидна, обновляем контекст и рендерим снова

@@ -10,6 +10,7 @@ class Profile(models.Model):
     edit_address = models.BooleanField(default=False)
     edit_machine = models.BooleanField(default=False)
     edit_counter = models.BooleanField(default=False)
+
     # Дополнительные поля профиля пользователя
     def get_full_name(self):
         """Возвращает полное имя пользователя"""
@@ -30,10 +31,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Address(models.Model):
     """Адресса в которых стоят аппараты"""
-    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='address_user',
-    #                          verbose_name='Пользователь')
+
     city = models.CharField(max_length=100, verbose_name="Город", help_text="Введите город")
     street = models.CharField(max_length=100, verbose_name="Улица", help_text="Введите улицу")
     house_number = models.CharField(max_length=10, verbose_name="Дом", help_text="Введите номер дома")
@@ -65,6 +66,7 @@ class Address(models.Model):
         else:
             print(f"Ошибка геокодирования для адреса: {address}")
             return None
+
 
 class Machine(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название аппарата')

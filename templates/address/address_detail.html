@@ -57,7 +57,7 @@
         {% endif %}
 
         <div class="row mt-4">
-            <div class="col-6">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                 <h2>Список аппаратов</h2>
                 <ul class="list-group">
                     {% for machine in address.machines.all %}
@@ -68,7 +68,6 @@
                                         <a href="{% url 'machine_detail' machine.pk %}"
                                            class="float-start text-decoration-none text-reset">{{ machine.name }}</a>
                                     </div>
-
                                     <div class="col-8 d-flex justify-content-end justify-content-end">
                                         <a href="{% url 'machine_detail' machine.pk %}" class="btn btn-info btn-sm m-1">Подробнее</a>
                                         {% if user.is_authenticated and user.is_staff and user.profile.edit_address and user.profile.edit_address and user.profile.edit_machine %}
@@ -110,7 +109,7 @@
                     {% endcache %}
                 {% endif %}
                 {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
-{#                    <a href="{% url 'machine_create' %}" class="btn btn-primary">Добавить</a>#}
+                    {#                    <a href="{% url 'machine_create' %}" class="btn btn-primary">Добавить</a>#}
                     <a href="{% url 'address_update' address.pk %}" class="btn btn-secondary">Редактировать</a>
                     <a href="{% url 'address_delete' address.pk %}" class="btn btn-danger">Удалить</a>
                 {% endif %}
