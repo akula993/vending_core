@@ -108,7 +108,9 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ counter_form.as_p }}
+<div class="d-grid gap-2 col-6 mx-auto">
                         <button type="submit" class="btn btn-primary">Добавить счетчик</button>
+                </div>
                     </form>
                 </div>
             </div>
@@ -134,10 +136,10 @@
         </div>
 
         <p class="mt-4">
+        <div class="d-grid gap-2">
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                    aria-expanded="false" aria-controls="collapseExample">
-                Кнопка с data-target
-            </button>
+                    aria-expanded="false" aria-controls="collapseExample">Счетчики</button>
+        </div>
         <div class="collapse" id="collapseExample">
             <div class="card card-body">
 
@@ -147,7 +149,7 @@
                         <ul class="list-group">
                             {% for counter in machine.counter.all|slice:"::-1" %}
                                 <li class="list-group-item">
-                                    {{ counter.counter_value }}
+                                    {{ counter.counter_value }} - {{ counter.month }}
                                     <a href="{% url 'counter_update' counter.pk %}"
                                        class="btn btn-secondary btn-sm float-end">Редактировать</a>
                                     <a href="{% url 'counter_delete' counter.pk %}"
