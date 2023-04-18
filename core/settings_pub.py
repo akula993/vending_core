@@ -31,7 +31,7 @@ DATABASES = {
 }
 
 STATIC_URL = 'public_html/static/'
-STATIC_ROOT = BASE_DIR / '/home/users/a/akula993/projects/vending/project/public_html/static/'
+STATIC_ROOT = BASE_DIR / '/home/users/a/akula993/domains/akula-inc.online/public_html/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static',
                     'static_src',
                     ]
