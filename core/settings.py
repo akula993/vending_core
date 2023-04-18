@@ -2,7 +2,6 @@ import platform
 
 DEV_MODE = (platform.node() != 'srv241-h-st.jino.ru')
 
-
 if DEV_MODE:
     DEBUG = True
     from core.settings_dev import *
@@ -17,7 +16,6 @@ LOGIN_REDIRECT_URL = 'address_list'
 # AUTH_USER_MODEL = 'vendings.CustomUser'
 LOGIN_URL = '/accounts/login/'  # URL для страницы входа
 LOGOUT_URL = '/accounts/logout/'  # URL для страницы выхода
-
 
 SECRET_KEY = 'django-insecure-mw*aw5!hyssxid4l+2^nw%$9xbcs7hnb2(zg(^3m*%c888^q$h'
 

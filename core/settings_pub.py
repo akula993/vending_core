@@ -28,6 +28,7 @@ DATABASES = {
 }
 
 
+
 STATIC_URL = 'public_html/static/'
 STATIC_ROOT = BASE_DIR / 'public_html/static'
 STATICFILES_DIRS = [BASE_DIR / 'static',
