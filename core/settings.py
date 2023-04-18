@@ -9,7 +9,6 @@ else:
     DEBUG = False
     from core.settings_pub import *
 
-ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = 'address_list'
 
