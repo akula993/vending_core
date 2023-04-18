@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, User
 from django.db import models
+from django.utils.functional import cached_property
 from geopy import Nominatim
 
 
@@ -43,7 +44,7 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.city}, {self.street} {self.house_number}{self.shop_name}"
 
-
+    @cached_property
     def geo(self):
         geolocator = Nominatim(user_agent="myGeocoder1")  # Измените user_agent на свое значение
         # Адрес, который нужно геокодировать
