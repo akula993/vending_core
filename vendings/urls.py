@@ -1,5 +1,7 @@
 from django.contrib.auth.views import LogoutView, LoginView
 from django.urls import path
+from django.views.decorators.cache import cache_page
+
 from .views import AddressListView, AddressDetailView, AddressCreateView, AddressUpdateView, AddressDeleteView, \
     MachineDeleteView, MachineDetailView, \
     MachineUpdateView, MachineCreateView, MachineListView, CounterListView, CounterDetailView, CounterCreateView, \
@@ -9,9 +11,9 @@ from .views import AddressListView, AddressDetailView, AddressCreateView, Addres
 urlpatterns = [
     # Аппараты
     # Путь для списка адресов
-    path('', AddressListView.as_view(), name='address_list'),
+    path('', cache_page(60 * 15)(AddressListView.as_view()), name='address_list'),
     # Путь для подробного адреса
-    path('addresses/<int:pk>/detail/', AddressDetailView.as_view(), name='address_detail'),
+    path('addresses/<int:pk>/detail/', cache_page(60 * 15)(AddressDetailView.as_view()), name='address_detail'),
     # Путь для создания нового адреса
     path('addresses/create/', AddressCreateView.as_view(), name='address_create'),
     # Путь для обновления адреса
