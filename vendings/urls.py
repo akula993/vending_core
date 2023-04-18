@@ -11,9 +11,9 @@ from .views import AddressListView, AddressDetailView, AddressCreateView, Addres
 urlpatterns = [
     # Аппараты
     # Путь для списка адресов
-    path('', cache_page(60 * 15)(AddressListView.as_view()), name='address_list'),
+    path('', cache_page(60 * 180)(AddressListView.as_view()), name='address_list'),
     # Путь для подробного адреса
-    path('addresses/<int:pk>/detail/', cache_page(60 * 15)(AddressDetailView.as_view()), name='address_detail'),
+    path('addresses/<int:pk>/detail/', cache_page(60 * 180)(AddressDetailView.as_view()), name='address_detail'),
     # Путь для создания нового адреса
     path('addresses/create/', AddressCreateView.as_view(), name='address_create'),
     # Путь для обновления адреса
