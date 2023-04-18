@@ -1,6 +1,7 @@
 from django.contrib.auth.views import LogoutView, LoginView
 from django.urls import path
 from django.views.decorators.cache import cache_page
+from django.views.generic import TemplateView
 
 from .views import AddressListView, AddressDetailView, AddressCreateView, AddressUpdateView, AddressDeleteView, \
     MachineDeleteView, MachineDetailView, \
@@ -52,5 +53,10 @@ urlpatterns = [
 
     # Пример URL-маршрута для профиля пользователя с передачей значения pk
     path('accounts/profile/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),
+
+
+
+    path('test/', TemplateView.as_view(template_name='test/base.html'), name='test'),
+
 
 ]

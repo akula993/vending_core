@@ -6,7 +6,7 @@ from geopy import Nominatim
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    profile_image = models.ImageField(upload_to='profile_images/')
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     edit_address = models.BooleanField(default=False)
     edit_machine = models.BooleanField(default=False)
@@ -32,17 +32,25 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
 
 class Address(models.Model):
-    """Адресса в которых стоят аппараты"""
+    """Адреса в которых стоят аппараты"""
 
     city = models.CharField(max_length=100, verbose_name="Город", help_text="Введите город")
     street = models.CharField(max_length=100, verbose_name="Улица", help_text="Введите улицу")
     house_number = models.CharField(max_length=10, verbose_name="Дом", help_text="Введите номер дома")
-    shop_name = models.CharField(max_length=100, verbose_name="Магазин", help_text="Введите магазин где стоит аппарат")
+    shop_name = models.CharField(max_length=100, verbose_name="Магазин", help_text="Введите магазин где стоит аппарат", blank=True)
 
     def __str__(self):
         return f"{self.city}, {self.street} {self.house_number}{self.shop_name}"
+
+    class Meta:
+        verbose_name = 'Адрес'
+        verbose_name_plural = 'Адреса'
 
     @cached_property
     def geo(self):
