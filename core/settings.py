@@ -7,7 +7,7 @@ if DEV_MODE:
     from core.settings_dev import *
 else:
     DEBUG = False
-    from settings_pub import *
+    from core.settings_pub import *
 
 ALLOWED_HOSTS = []
 
