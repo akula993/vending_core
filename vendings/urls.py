@@ -56,7 +56,7 @@ urlpatterns = [
 
 
 
-    path('test/', TemplateView.as_view(template_name='test/base.html'), name='test'),
+    path('test/', AddressListView.as_view(template_name='test/address/list.html'), name='test'),
 
 
 ]
