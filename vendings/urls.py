@@ -54,9 +54,7 @@ urlpatterns = [
     # Пример URL-маршрута для профиля пользователя с передачей значения pk
     path('accounts/profile/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),
 
-
-
-    path('test/', AddressListView.as_view(template_name='test/address/list.html'), name='test'),
-
-
+    path('test/', AddressListView.as_view(template_name='test/address/list.html'), name='address_list_test'),
+    path('test/<int:pk>/detail/', AddressDetailView.as_view(template_name='test/address/detail.html'),
+         name='address_detail_test'),
 ]
