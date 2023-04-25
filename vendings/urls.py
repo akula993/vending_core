@@ -53,8 +53,20 @@ urlpatterns = [
 
     # Пример URL-маршрута для профиля пользователя с передачей значения pk
     path('accounts/profile/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),
-
+    # ТЕСТ
+    # Аппараты
+    # Путь для списка адресов
     path('test/', AddressListView.as_view(template_name='test/address/list.html'), name='address_list_test'),
+    # Путь для подробного адреса
     path('test/<int:pk>/detail/', AddressDetailView.as_view(template_name='test/address/detail.html'),
          name='address_detail_test'),
+    # Путь для создания нового адреса
+    path('test/addresses/create/', AddressCreateView.as_view(template_name='test/address/create.html'),
+         name='address_create_test'),
+    # Путь для обновления адреса
+    path('test/addresses/<int:pk>/update/', AddressUpdateView.as_view(template_name='test/address/update.html'),
+         name='address_update_test'),
+    # Путь для удаления адреса
+    path('test/addresses/<int:pk>/delete/', AddressDeleteView.as_view(template_name='test/address/delete.html'),
+         name='address_delete_test'),
 ]
