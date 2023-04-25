@@ -1,6 +1,6 @@
 import platform
 
-DEV_MODE = (platform.node() != 'srv241-h-st.jino.ru')
+DEV_MODE = (platform.node() != 'webmin.akula-inc.online')
 
 if DEV_MODE:
     DEBUG = True

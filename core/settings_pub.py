@@ -2,7 +2,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = ['akula-inc.online', 'www.akula-inc.online', ]
+# ALLOWED_HOSTS = ['test.akula-inc.online', 'www.test.akula-inc.online', '192.168.1.115', '91.107.42.161',]
+ALLOWED_HOSTS = ['*',]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -14,7 +15,7 @@ EMAIL_HOST_PASSWORD = 'postojrkzxzihejp'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': 'unix:///home/users/a/akula993/memcached/memcached.sock',
+        'LOCATION': '127.0.0.1:11211',
         # Укажите IP-адрес и порт вашего Memcached-сервера
     }
 }
@@ -22,7 +23,8 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'akula993_vending',
+        #'NAME': 'akula993_vending',
+	'NAME': 'uakula993',
         'USER': 'akula993',
         'PASSWORD': 'wind2606',
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
@@ -30,8 +32,8 @@ DATABASES = {
     }
 }
 
-STATIC_URL = 'public_html/static/'
-STATIC_ROOT = BASE_DIR / '/home/users/a/akula993/domains/akula-inc.online/public_html/static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / '/var/work/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static',
                     'static_src',
                     ]
