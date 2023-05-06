@@ -108,9 +108,9 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ counter_form.as_p }}
-<div class="d-grid gap-2 col-6 mx-auto">
-                        <button type="submit" class="btn btn-primary">Добавить счетчик</button>
-                </div>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button type="submit" class="btn btn-primary">Добавить счетчик</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -138,7 +138,8 @@
         <p class="mt-4">
         <div class="d-grid gap-2">
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                    aria-expanded="false" aria-controls="collapseExample">Счетчики</button>
+                    aria-expanded="false" aria-controls="collapseExample">Счетчики
+            </button>
         </div>
         <div class="collapse" id="collapseExample">
             <div class="card card-body">

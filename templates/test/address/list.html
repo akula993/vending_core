@@ -38,36 +38,61 @@
                         <table class="table border-top table-bordered mb-0">
                             <thead>
                             <tr>
-                                {% if address.geo == None %}
-                                {% elif address.geo %}
-                                    <th class="text-center">Карта</th>
-                                {% endif %}
+                                <th></th>
                                 <th>Адрес</th>
-                                <th class="text-center">Параметры</th>
+                                {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+                                    <th class="text-center">Параметры</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
                             {% for address in addresses %}
-
                                 <tr>
                                     {% if address.geo == None %}
                                     {% elif address.geo %}
-                                        <td class="align-middle text-center">
-                                            <a href="yandexnavi://map_search?text={{ address.geo }}"
-                                               class="btn btn-orange">Маршрут</a>
+                                        <td class="align-middle text-center" data-bs-toggle="collapse"
+                                            href="#collapseExample{{ forloop.counter }}" role="button"
+                                            aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">+
                                         </td>
+
                                     {% endif %}
                                     <td class="text-nowrap align-middle"><a
                                             href="{% url 'address_detail_test' address.pk %}">{{ address.city }}
                                         {{ address.street|truncatechars:9 }} {{ address.house_number }}</a></td>
-                                    <td class="text-center align-middle">
-                                        <div class="btn-group align-top">
-                                            <a class="btn btn-sm btn-primary badge"
-                                               href="{% url 'address_update_test' address.pk %}">Изменить</a>
-                                            <a class="btn btn-sm btn-primary badge"
-                                               href="{% url 'address_delete_test' address.pk %}"><i class="fa fa-trash"></i></a>
+                                    {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+                                        <td class="text-center align-middle">
+                                            <div class="btn-group align-top">
+                                                <a class="btn btn-sm btn-primary badge"
+                                                   href="{% url 'address_update_test' address.pk %}">Изменить</a>
+                                                <a class="btn btn-sm btn-primary badge"
+                                                   href="{% url 'address_delete_test' address.pk %}"><i
+                                                        class="fa fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    {% endif %}
+{#                                    <script>#}
+{#                                        var toggleCollapse = function () {#}
+{#                                            var target = this.getAttribute('href');#}
+{#                                            var collapse = document.querySelector(target);#}
+{#                                            collapse.classList.toggle('show');#}
+{#                                        };#}
+{##}
+{#                                        var buttons = document.querySelectorAll('.collapse-button');#}
+{#                                        for (var i = 0; i < buttons.length; i++) {#}
+{#                                            buttons[i].addEventListener('click', toggleCollapse);#}
+{#                                        }#}
+{#                                    </script>#}
+                                </tr>
+                                <tr>
+                                    <td class="col-2">
+                                        <div class="collapse" id="collapseExample{{ forloop.counter }}">
+                                            <div class="card card-body p-0">
+                                                <a href="yandexnavi://map_search?text={{ address.geo }}"
+                                                   class="btn btn-orange p-1">Маршрут</a>
+                                            </div>
                                         </div>
                                     </td>
+                                <td></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

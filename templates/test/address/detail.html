@@ -14,13 +14,9 @@
         </div>
     </div>
     <!-- PAGE-HEADER END -->
-
     <!-- Row -->
     <div class="row row-sm">
-
-
         {% if address.geo == None %}
-
             <div class="col-lg-12">
                 <div class="card mg-b-20">
                     <div class="card-header">
@@ -34,7 +30,6 @@
             <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
             <script type="text/javascript">
                 ymaps.ready(init);
-
                 function init() {
                     var myMap = new ymaps.Map("map", {
                         center: [55.755820, 37.617633],
@@ -58,7 +53,6 @@
             <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
             <script type="text/javascript">
                 ymaps.ready(init);
-
                 function init() {
                     var myMap = new ymaps.Map("map", {
                         center: [{{ address.geo }}],
@@ -76,7 +70,6 @@
                 }
             </script>
         {% endif %}
-
     </div>
     <!-- /Row -->
     <!-- ROW OPEN -->
