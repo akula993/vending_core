@@ -1,0 +1,199 @@
+{% extends 'test/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <h1 class="page-title">{{ machine.name }}
+            - {{ machine.address.city }}, {{ machine.address.street }}, {{ machine.address.house_number }}
+            магазин: {{ machine.address.shop_name }}</h1>
+        <div>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Аппарат</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a
+                        href="{% url 'address_detail_test' machine.pk %}">Список аппаратов</a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- PAGE-HEADER END -->
+    <!-- Row -->
+    <div class="row row-sm">
+
+    </div>
+    <!-- /Row -->
+    <!-- ROW OPEN -->
+    <div class="row row-cards">
+        <div class="col-lg-12 col-xl-12">
+            <div class="card">
+                <div class="card-header">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <div class="row">
+                <div class="col-md">
+                    <h2>График счетчиков</h2>
+                    <!-- Элемент canvas для отображения графика -->
+                    <canvas id="counterChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Подключение библиотеки Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div id="results"
+             data-values="{% for counter in machine.counter.all %}{{ counter.counter_value }},{% endfor %}"></div>
+        <!-- JavaScript код для создания графика счетчиков -->
+        <script>
+
+            var resultsElement = document.getElementById('results');
+            var valuesString = resultsElement.dataset.values; // Получение значения атрибута data-values
+            var valuesArray = valuesString.split(','); // Разбивка строки на массив значений
+
+            // Удаляем последний элемент массива, так как он будет содержать пустую строку
+            valuesArray.pop();
+
+            // Получение данных для меток (labels) и значений (data) из массива значений
+            var labels = [{% for counter in machine.counter.all %}'{{ counter.month|date:"d-m-yг" }}',{% endfor %}];
+            var data = valuesArray.map(function (value) {
+                return parseInt(value); // Парсим значения в числа, если они являются числами
+            });
+            var reversedData = data.slice().reverse();
+            var result = data.map(function (curr, index) {
+                if (index === 0) {
+                    return curr;
+                } else {
+                    return data[index - 1] - curr;
+                }
+            });
+
+
+            data = result.map(s => Math.abs(s));
+
+            data = data.map(
+                function (n) {
+                    return (n * 10);
+                }
+            );
+            console.log(data.shift());
+            var counterData = {
+                labels: labels,
+                datasets: [{
+                    label: 'Значение счетчика',
+                    data: data,
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1
+                }]
+            };
+            var counterConfig = {
+                type: 'line',
+                data: counterData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Дата и время'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Значение счетчика'
+                            }
+                        }
+                    }
+                }
+            };
+            var counterChart = new Chart(document.getElementById('counterChart'), counterConfig);
+            var collapseElementList = Array.prototype.slice.call(document.querySelectorAll('.collapse'))
+            var collapseList = collapseElementList.map(function (collapseEl) {
+                return new bootstrap.Collapse(collapseEl)
+            })
+        </script>
+                </div>
+                <div class="e-table px-5 pb-5">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-home"
+                                    type="button" role="tab" aria-controls="nav-home" aria-selected="true">Добавить
+                                счетчик
+                            </button>
+                            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-contact"
+                                    type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                                Контакт
+                            </button>
+                            <button class="nav-link" id="nav-counter-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-counter"
+                                    type="button" role="tab" aria-controls="nav-counter" aria-selected="false">
+                                Счетчики
+                            </button>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                             aria-labelledby="nav-home-tab">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-4">
+                                <h2 class="text-center">Добавить счетчик</h2>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ counter_form.as_p }}
+                                    <div class="d-grid gap-2 col-6 mx-auto">
+                                        <button type="submit" class="btn btn-primary">Добавить счетчик</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                             aria-labelledby="nav-contact-tab">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row">
+                                    <h1 class="text-center">{{ machine.name }}</h1>
+                                    <p>Тип: {{ machine.type }}</p>
+                                    <p>Серийный номер: {{ machine.serial_number }}</p>
+                                    <p>Год выпуска: {{ machine.year }}</p>
+                                    <p>Описание: {{ machine.description }}</p>
+                                    <p>Сумма: {{ machine.get_sum }}р.</p>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                        <a href="{% url 'machine_update' machine.pk %}" class="btn btn-secondary">Редактировать</a>
+                                        <a href="{% url 'machine_delete' machine.pk %}"
+                                           class="btn btn-danger">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-counter" role="tabpanel"
+                             aria-labelledby="nav-counter-tab">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="row">
+                                    <ul class="list-group">
+                                        {% for counter in machine.counter.all|slice:"::-1" %}
+                                            <li class="list-group-item">
+                                            <p>{{ counter.counter_value }} - {{ counter.month|date:"j F Yг." }}</p>
+
+                                                <a href="{% url 'counter_update' counter.pk %}"
+                                                   class="btn btn-secondary btn-sm float-end">Редактировать</a>
+                                                <a href="{% url 'counter_delete' counter.pk %}"
+                                                   class="btn btn-danger btn-sm float-end me-2">Удалить</a>
+                                            </li>
+                                        {% empty %}
+                                            <li class="list-group-item">Нет аппаратов</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- COL-END -->
+    </div>
+    <!-- ROW CLOSED -->
+{% endblock %}

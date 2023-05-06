@@ -30,6 +30,7 @@
             <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
             <script type="text/javascript">
                 ymaps.ready(init);
+
                 function init() {
                     var myMap = new ymaps.Map("map", {
                         center: [55.755820, 37.617633],
@@ -53,6 +54,7 @@
             <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
             <script type="text/javascript">
                 ymaps.ready(init);
+
                 function init() {
                     var myMap = new ymaps.Map("map", {
                         center: [{{ address.geo }}],
@@ -75,57 +77,70 @@
     <!-- ROW OPEN -->
     <div class="row row-cards">
         <div class="col-lg-12 col-xl-12">
-            <div class="input-group mb-5">
-                <input type="text" class="form-control" placeholder="Search">
-                <div class="input-group-text btn btn-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </div>
-            </div>
             <div class="card">
                 <div class="card-header border-bottom-0">
-                    <h2 class="card-title">{{ addresses.count }} - адрес{{ addresses.count|pluralize:"ов|а|ов" }}</h2>
-                    <div class="page-options ms-auto">
-                        <select class="form-control select2 w-100">
-                            <option value="asc">Latest</option>
-                            <option value="desc">Oldest</option>
-                        </select>
-                    </div>
+                    {#                    <h2 class="card-title">адрес - {{ address.city }} {{ address.street }} {{ address.house_number }} {{ address.shop_name }} - {{ addresses.count|pluralize:"ов|а|ов" }}</h2>#}
+                    {#                    <div class="page-options ms-auto">#}
+                    {#                        <select class="form-control select2 w-100">#}
+                    {#                            <option value="asc">Latest</option>#}
+                    {#                            <option value="desc">Oldest</option>#}
+                    {#                        </select>#}
+                    {#                    </div>#}
                 </div>
                 <div class="e-table px-5 pb-5">
                     <div class="table-responsive table-lg">
                         <table class="table border-top table-bordered mb-0">
                             <thead>
                             <tr>
-                                {% if address.geo == None %}
-                                {% elif address.geo %}
-                                    <th class="text-center">Карта</th>
-                                {% endif %}
+                                <th></th>
                                 <th>Адрес</th>
-                                <th class="text-center">Параметры</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for address in addresses %}
-
+                            {% for machines in address.machines.all %}
                                 <tr>
                                     {% if address.geo == None %}
                                     {% elif address.geo %}
-                                        <td class="align-middle text-center">
-                                            <a href="yandexnavi://map_search?text={{ address.geo }}"
-                                               class="btn btn-orange">Маршрут</a>
+                                        <td class="align-middle text-center" data-bs-toggle="collapse"
+                                            href="#collapseExample{{ forloop.counter }}" role="button"
+                                            aria-expanded="false" aria-controls="collapseExample{{ forloop.counter }}">+
                                         </td>
+
                                     {% endif %}
                                     <td class="text-nowrap align-middle"><a
-                                            href="{% url 'address_detail' address.pk %}">{{ address.city }}
-                                        {{ address.street|truncatechars:9 }} {{ address.house_number }}</a></td>
-                                    <td class="text-center align-middle">
-                                        <div class="btn-group align-top">
-                                            <a class="btn btn-sm btn-primary badge"
-                                               href="{% url 'address_update_test' address.pk %}">Изменить</a>
-                                            <a class="btn btn-sm btn-primary badge"
-                                               href="{% url 'address_delete_test' address.pk %}"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </td>
+                                            href="{% url 'machine_detail_test' machines.pk %}">{{ machines.name }}</a></td>
+
+                                </tr>
+                                <tr class="collapse" id="collapseExample{{ forloop.counter }}">
+
+                                    {% if user.is_authenticated and user.is_staff and user.profile.edit_address %}
+                                        <td class="col-2">
+                                            <a href="yandexnavi://map_search?text={{ address.geo }}"
+                                               class="btn btn-orange p-1">Маршрут</a>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="btn-group align-top">
+                                                <a class="btn btn-sm btn-primary badge"
+                                                   href="{% url 'address_update_test' address.pk %}">Изменить</a>
+                                                <a class="btn btn-sm btn-primary badge"
+                                                   href="{% url 'address_delete_test' address.pk %}"><i
+                                                        class="fa fa-trash"></i></a>
+                                            </div>
+                                        </td>
+
+                                    {% elif user.is_authenticated %}
+                                        <td class="col-2" colspan="2">
+                                            <div class="d-grid gap-2 col-6 mx-auto">
+                                                <a href="yandexnavi://map_search?text={{ address.geo }}"
+                                                   class="btn btn-orange p-1">Маршрут</a>
+                                            </div>
+                                        </td>
+                                        {#                                <div >#}
+                                        {#  <button class="btn btn-primary" type="button">Button</button>#}
+                                        {#  <button class="btn btn-primary" type="button">Button</button>#}
+                                        {#</div>#}
+                                    {% endif %}
+
                                 </tr>
                             {% endfor %}
                             </tbody>

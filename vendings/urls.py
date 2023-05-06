@@ -69,4 +69,16 @@ urlpatterns = [
     # Путь для удаления адреса
     path('test/addresses/<int:pk>/delete/', AddressDeleteView.as_view(template_name='test/address/delete.html'),
          name='address_delete_test'),
+
+    # Аппаратов
+    # Путь для подробного аппаратов
+    path('test/machine/<int:pk>/detail/', MachineDetailView.as_view(template_name='test/machine/detail.html'),
+         name='machine_detail_test'),
+    # Путь для создания нового аппаратов
+    path('test/machine/create/', MachineCreateView.as_view(), name='machine_create_test'),
+    # Путь для обновления аппаратов
+    path('test/machine/<int:pk>/update/', MachineUpdateView.as_view(), name='machine_update_test'),
+    # Путь для удаления аппаратов
+    path('test/machine/<int:pk>/delete/', MachineDeleteView.as_view(), name='machine_delete_test'),
+    # Аналогично можно добавить URL-пути для представлений, связанных с моделями Machine и Counter
 ]
